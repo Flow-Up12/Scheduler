@@ -124,12 +124,14 @@ const Sidebar: React.FC = () => {
                   month: 'short',
                   day: 'numeric',
                   hour: 'numeric',
+                  minute: 'numeric',
                 });
 
                 const formattedEndDate = endDate?.toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   hour: 'numeric',
+                  minute: 'numeric',
                 });
 
                 return (

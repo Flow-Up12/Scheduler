@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 
 export const Header = () => {
   return (
@@ -8,9 +8,7 @@ export const Header = () => {
           <h1 className="text-3xl font-bold tracking-wide">Schedule App</h1>
         </div>
         <div>
-          <button className="text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-md transition duration-300">
-            Add Event
-          </button>
+         <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
         </div>
       </Box>
     </header>
