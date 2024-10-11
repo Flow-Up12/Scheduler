@@ -51,47 +51,38 @@ li {
 }
 
 b {
-  /* used for event dates/times */
   margin-right: 3px;
 }
 
-.demo-app-main {
-  flex-grow: 1;
+.main {
   overflow: auto;
+  max-height: fit-content;
 }
 
-.demo-app {
-  display: flex;
-  height: 100vh;
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-  font-size: 14px;
-}
-
-.demo-app-sidebar {
- 
+.sidebar {
   line-height: 1.5;
   border-right: 1px solid #d3e2e8;
 }
 
-.demo-app-sidebar-section {
+.sidebar-section {
   margin-bottom: 20px;
 }
 
-.demo-app-sidebar ul {
+.sidebar ul {
   list-style-type: none;
   padding-left: 0;
 }
 
-.demo-app-sidebar li {
+.sidebar li {
   margin-bottom: 10px;
 }
 
-.demo-app-sidebar label {
+.sidebar label {
   display: block;
   margin-bottom: 10px;
 }
 
-.demo-app-main {
+.main {
   flex-grow: 1;
   padding: 3em;
 }

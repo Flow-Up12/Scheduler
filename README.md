@@ -1,50 +1,38 @@
-# React + TypeScript + Vite
+# Schedule App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A powerful, interactive, and dynamic event scheduling application built using **React**, **TypeScript**, **Vite**, and **FullCalendar**. The app allows users to easily create, edit, and manage events with a user-friendly interface. The application features a draggable sidebar, interactive modals, and customizable views for better scheduling.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Event Creation and Management**: Add events by selecting a date, and edit them by clicking the event directly in the calendar.
+- **Draggable Sidebar**: A resizable and draggable sidebar that contains event details and useful instructions.
+- **Interactive Modals**: Clean and dynamic modals for creating and editing events, including title, time, and optional event image.
+- **FullCalendar Integration**: Powered by FullCalendar for a smooth and responsive scheduling experience.
+- **Dark Mode Support**: Modern dark mode for the header and modals.
+- **Customizable Events**: Easily drag and drop events to update their time or date.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React**: Frontend framework used to build a highly interactive user interface.
+- **TypeScript**: Statically typed JavaScript for better code quality.
+- **Vite**: A fast development build tool.
+- **Tailwind CSS**: Utility-first CSS framework for fast and responsive UI design.
+- **FullCalendar**: Advanced and interactive calendar for handling events.
+- **Material UI (MUI)**: Professional icons and components to enhance the UI.
 
-- Configure the top-level `parserOptions` property like this:
+## Installation and Setup
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Prerequisites
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Before running the app, make sure you have the following installed:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **Node.js** (version 16 or above)
+- **npm** or **yarn**
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Cloning the Repository
+
+Clone the repository to your local machine using:
+
+```bash
+git clone https://github.com/Flow-Up12/Scheduler.git
+cd schedule-app

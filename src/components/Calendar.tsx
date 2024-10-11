@@ -21,7 +21,7 @@ const Calendar = () => {
   }
 
   return (
-    <div className="demo-app-main">
+    <div className="main">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         headerToolbar={{
