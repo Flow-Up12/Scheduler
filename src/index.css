@@ -57,7 +57,7 @@ b {
 
 .demo-app-main {
   flex-grow: 1;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .demo-app {

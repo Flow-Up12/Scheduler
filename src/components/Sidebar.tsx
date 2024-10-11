@@ -12,7 +12,7 @@ const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false); // Track if the sidebar is collapsed
   const [previousWidth, setPreviousWidth] = useState(400); // To track previous width
 
-  const MIN_WIDTH = 40; // Minimum width of the sidebar to keep handle visible
+  const MIN_WIDTH = 30; // Minimum width of the sidebar to keep handle visible
 
   // Mouse down handler to start dragging
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -95,11 +95,11 @@ const Sidebar: React.FC = () => {
             <ul className="list-disc list-inside text-gray-600">
               <li>Select dates and you will be prompted to create a new event</li>
               <li>Drag, drop, and resize events</li>
-              <li>Click an event to delete it</li>
+              <li>Click an event to edit it</li>
             </ul>
           </div>
 
-          <div className="mb-6">
+          <div className="mb-6 px-5">
             <label className="flex items-center space-x-2 text-gray-700">
               <input
                 type="checkbox"

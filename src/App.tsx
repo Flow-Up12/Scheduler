@@ -14,6 +14,7 @@ const App = () => {
 
         {/* Main content below the header */}
         <div
+          style={{ height: '100vh' }} // Subtract the header height
           className="flex pt-16" // Ensure padding for the fixed header
         >
           <Sidebar />
