@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Avatar, Box, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../helpers/AuthProvider";
+import { useAuth } from "../context/AuthProvider";
 
 export const Header: React.FC = () => {
   const { currentUser, logout } = useAuth();
@@ -21,23 +21,24 @@ export const Header: React.FC = () => {
   };
 
   // Handlers for menu items
-  const handleProfileClick = () => {
-    navigate("/profile");
-    handleMenuClose();
-  };
 
-  const handleRegisterOrganizationClick = () => {
-    navigate("/register-organization");
+  const handleRouteClick = (route: string) => {
+    navigate(route);
     handleMenuClose();
-  };
+  }
 
   return (
     <header className="bg-gray-900 p-4 fixed top-0 left-0 right-0 z-50 shadow-lg">
       <Box className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="text-white ">
-          <h1 onClick={() => {
-            navigate("/schedule");
-          }} className="text-3xl font-bold tracking-wide hover:scale-125 transition-transform cursor-pointer">Fratgenda</h1>
+          <h1
+            onClick={() => {
+              currentUser ? navigate("/schedule") : navigate("/login");
+            }}
+            className="text-3xl font-bold tracking-wide hover:scale-125 transition-transform cursor-pointer"
+          >
+            Fratgenda
+          </h1>
         </div>
         <div>
           {currentUser && (
@@ -47,7 +48,7 @@ export const Header: React.FC = () => {
                 alt={currentUser.displayName || "User"}
                 src={currentUser.photoURL ? currentUser.photoURL : undefined}
                 onClick={handleMenuOpen} // Click opens the menu
-                className="cursor-pointer hover:scale-125 transition-transform" 
+                className="cursor-pointer hover:scale-125 transition-transform"
               />
 
               {/* Menu for Avatar */}
@@ -64,16 +65,22 @@ export const Header: React.FC = () => {
                   horizontal: "right",
                 }}
               >
-                <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-                <MenuItem onClick={handleRegisterOrganizationClick}>
+                <MenuItem onClick={() => handleRouteClick('/profile')}>Profile</MenuItem>
+                <MenuItem onClick={() => handleRouteClick('/organization')}>
                   Organization
                 </MenuItem>
-                <MenuItem onClick={() => {
-                  logout()
-                  handleMenuClose();
-                  navigate("/login");
-                }                  
-                }>Logout</MenuItem>
+                <MenuItem onClick={() => handleRouteClick('/join-organization')}>
+                  Join Organization
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    logout();
+                    handleMenuClose();
+                    navigate("/login");
+                  }}
+                >
+                  Logout
+                </MenuItem>
               </Menu>
             </>
           )}

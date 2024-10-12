@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Loading from "../components/Loading";
-import { useAuth } from "../helpers/AuthProvider";
-import { Form, TextInput, useNotify, FileInput } from "mj-react-form-builder";
+import { useNotify, Form, TextInput, FileInput } from "mj-react-form-builder";
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import FirestoreController from "../helpers/FirebaseController";
 import { FormattedFile } from "../types/types";
+import FirestoreController from "../helpers/FirebaseController";
+import { useUserContext } from "../context/UserContextProvider";
+import { useAuth } from "../context/AuthProvider";
 
 const userController = new FirestoreController("users");
 const storage = getStorage(); // Firebase storage for photo uploads
 
-// Define the type interface for user profile data
 interface UserProfile {
   firstName: string;
   lastName: string;
@@ -23,59 +23,31 @@ interface UserProfile {
 }
 
 const ProfilePage: React.FC = () => {
+  const { user, refetchUser } = useUserContext(); 
   const { currentUser } = useAuth();
   const { notify } = useNotify();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Default values state typed with the UserProfile interface
-  const [defaultValues, setDefaultValues] = useState<UserProfile>({
-    firstName: "",
-    lastName: "",
-    photoURL: null,
-    email: currentUser?.email || "",
-  });
-
-  const transformFile = (file: File) => {
-    const transformedFile = {
-      rawFile: file,
-      src: file,
-      title: file,
-    };
-    return transformedFile;
+  const defaultValues: UserProfile = {
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    photoURL: user?.photoURL
+      ? [
+          {
+            rawFile: new File([], user.photoURL),
+            src: user.photoURL,
+            title: user.photoURL,
+          },
+        ]
+      : null,
+    email: user?.email || "",
   };
 
-  // Fetch user data to populate the form
-  const fetchUserData = async () => {
-    if (currentUser) {
-      setIsLoading(true);
-      try {
-        const userData = await userController.getById(currentUser.uid);
-        if (userData) {
-          // Update default values with fetched data
-          setDefaultValues({
-            firstName: userData.firstName || "",
-            lastName: userData.lastName || "",
-            photoURL: userData.photoURL ([transformFile(userData.photoURL)]) || null,
-            email: userData.email || currentUser.email || "",
-          });
-        }
-      } catch (error: any) {
-        notify(`Failed to fetch user data: ${error.message}`, "error");
-      }
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserData();
-  }, [currentUser]);
-
-  // Upload profile photo to Firebase Storage and return the URL
   const uploadProfilePhoto = (file: FormattedFile) => {
     return new Promise<string>((resolve, reject) => {
       const storageRef = ref(
         storage,
-        `profile_photos/${currentUser?.uid}_${file.title}`
+        `profile_photos/${user?.uid}_${file.title}`
       );
       const uploadTask = uploadBytesResumable(storageRef, file.rawFile);
 
@@ -101,9 +73,17 @@ const ProfilePage: React.FC = () => {
     try {
       let photoURL = data.photoURL;
 
-      if (data.photoURL && typeof data.photoURL === "object" && data.photoURL) {
-        const file = data.photoURL;
-        photoURL = await uploadProfilePhoto(file[0]); // Upload photo and get URL
+      if (
+        data.photoURL &&
+        typeof data.photoURL === "object" &&
+        data.photoURL[0].src !== data.photoURL[0].title
+      ) {
+        const file = (data.photoURL as FormattedFile[])[0];
+        photoURL = await uploadProfilePhoto(file);
+      } else {
+        photoURL = data.photoURL && typeof data.photoURL === "object"
+          ? data.photoURL[0].src
+          : null;
       }
 
       const updatedUser = {
@@ -113,9 +93,12 @@ const ProfilePage: React.FC = () => {
         email: data.email,
       };
 
-      await userController.upsert(currentUser?.uid!, updatedUser);
+      await userController.upsert(currentUser?.uid!, updatedUser); 
+      
       notify("Profile updated successfully", "success");
-      await fetchUserData();
+
+      await refetchUser();
+      
     } catch (error: any) {
       notify(`Profile update failed: ${error.message}`, "error");
       console.error(error);
@@ -123,8 +106,6 @@ const ProfilePage: React.FC = () => {
 
     setIsLoading(false);
   };
-
-  console.log(defaultValues);
 
   return isLoading ? (
     <Loading />
@@ -155,7 +136,6 @@ const ProfilePage: React.FC = () => {
           </div>
         </Form>
       </div>
-      {isLoading && <Loading />}
     </section>
   );
 };

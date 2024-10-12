@@ -9,8 +9,8 @@ import {
   User,
   signOut,
 } from 'firebase/auth';
-import FirestoreController from './FirebaseController';
-import { auth } from './firebase';
+import FirestoreController from '../helpers/FirebaseController';
+import { auth } from '../firebase';
 
 
 interface AuthContextType {
@@ -87,9 +87,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           photoURL: user.photoURL,
           lastLogin: new Date().toISOString(),
         };
-        console.log(userData);
         // await userController.upsert(user.uid, userData);
-        setCurrentUser(user);
+        setCurrentUser(userData as any);
       } else {
         setCurrentUser(null);
       }

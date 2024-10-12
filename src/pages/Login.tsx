@@ -7,7 +7,7 @@ import { Form, TextInput, useNotify } from "mj-react-form-builder";
 // import IconButton from '@mui/material/IconButton';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../helpers/AuthProvider';
+import { useAuth } from '../context/AuthProvider';
 import ResetPasswordButton from '../components/ResetPasswordButton';
 
 export function AuthForm() {

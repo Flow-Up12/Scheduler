@@ -9,7 +9,7 @@ import {
   setDoc,
   getDoc,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "../firebase";
 
 // Define a generic type for data that will be used in documents
 type FirestoreData = Record<string, any>;

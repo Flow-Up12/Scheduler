@@ -6,10 +6,12 @@ import Calendar from "./components/Calendar";
 import CreateEventModal from "./components/CreateEventModal";
 import Header from "./components/Header";
 import AuthForm from "./pages/Login";
-import { AuthProvider } from "./helpers/AuthProvider";
 import { NotifyProvider } from "mj-react-form-builder";
-import RegisterOrganization from "./pages/RegisterOrganization";
+import Organization from "./pages/Organization";
 import ProfilePage from "./pages/Profile";
+import { UserProvider } from "./context/UserContextProvider";
+import { AuthProvider } from "./context/AuthProvider";
+import JoinOrganization from "./pages/JoinOrganization";
 
 const App = () => {
   return (
@@ -17,33 +19,44 @@ const App = () => {
       <NotifyProvider>
         <AuthProvider>
           <ScheduleProvider>
-            <div className="relative">
-              {/* Header */}
-              <Header />
+            <UserProvider>
+              <div className="relative">
+                {/* Header */}
+                <Header />
 
-              {/* Main Routes */}
-              <Routes>
-                <Route path="/login" element={<AuthForm />} />
-                <Route path="/register-organization" element={<RegisterOrganization />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route
-                  path="/schedule"
-                  element={
-                    <div
-                      style={{ height: "100vh" }} // Subtract the header height
-                      className="flex pt-16" // Ensure padding for the fixed header
-                    >
-                      <Sidebar />
-                      <Calendar />
-                    </div>
-                  }
-                />
-              </Routes>
+                {/* Main Routes */}
+                <Routes>
+                  <Route path="/login" element={<AuthForm />} />
 
-              {/* Modals */}
-              <EditEventModal />
-              <CreateEventModal />
-            </div>
+                  {/* Wrap protected routes with UserProvider */}
+                  <Route
+                    path="/schedule"
+                    element={
+                      <div
+                        style={{ height: "100vh" }} // Subtract the header height
+                        className="flex pt-16" // Ensure padding for the fixed header
+                      >
+                        <Sidebar />
+                        <Calendar />
+                      </div>
+                    }
+                  />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route
+                    path="/organization"
+                    element={<Organization />}
+                  />
+                  <Route
+                    path="/join-organization"
+                    element={<JoinOrganization />}
+                  />
+                </Routes>
+
+                {/* Modals */}
+                <EditEventModal />
+                <CreateEventModal />
+              </div>
+            </UserProvider>
           </ScheduleProvider>
         </AuthProvider>
       </NotifyProvider>
