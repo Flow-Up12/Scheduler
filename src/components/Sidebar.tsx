@@ -107,7 +107,7 @@ const Sidebar: React.FC = () => {
                 onChange={toggleWeekends}
                 className="form-checkbox h-5 w-5 text-blue-600"
               />
-              <span>Toggle weekends</span>
+              <span>Weekends</span>
             </label>
           </div>
 

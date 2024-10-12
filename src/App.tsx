@@ -5,7 +5,7 @@ import EditEventModal from "./components/EditEventModal";
 import Calendar from "./components/Calendar";
 import CreateEventModal from "./components/CreateEventModal";
 import Header from "./components/Header";
-import AuthForm from "./pages/Login";
+import Login from "./pages/Login";
 import { NotifyProvider } from "mj-react-form-builder";
 import Organization from "./pages/Organization";
 import ProfilePage from "./pages/Profile";
@@ -25,33 +25,28 @@ const App = () => {
                 <Header />
 
                 {/* Main Routes */}
-                <Routes>
-                  <Route path="/login" element={<AuthForm />} />
+                <div className="min-h-screen">
+                  <Routes>
+                    <Route path="/login" element={<Login />} />
 
-                  {/* Wrap protected routes with UserProvider */}
-                  <Route
-                    path="/schedule"
-                    element={
-                      <div
-                        style={{ height: "100vh" }} // Subtract the header height
-                        className="flex pt-16" // Ensure padding for the fixed header
-                      >
-                        <Sidebar />
-                        <Calendar />
-                      </div>
-                    }
-                  />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route
-                    path="/organization"
-                    element={<Organization />}
-                  />
-                  <Route
-                    path="/join-organization"
-                    element={<JoinOrganization />}
-                  />
-                </Routes>
-
+                    {/* Wrap protected routes with UserProvider */}
+                    <Route
+                      path="/schedule"
+                      element={
+                        <div className="flex my-16">
+                          <Sidebar />
+                          <Calendar />
+                        </div>
+                      }
+                    />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/organization" element={<Organization />} />
+                    <Route
+                      path="/join-organization"
+                      element={<JoinOrganization />}
+                    />
+                  </Routes>
+                </div>
                 {/* Modals */}
                 <EditEventModal />
                 <CreateEventModal />

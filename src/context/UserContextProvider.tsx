@@ -58,7 +58,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchUserData();
   }, [currentUser]);
 
-  if (isLoading || !user) {
+  if (isLoading) {
     return <Loading />; 
   }
 

@@ -11,6 +11,7 @@ import {
 } from 'firebase/auth';
 import FirestoreController from '../helpers/FirebaseController';
 import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 
 interface AuthContextType {
@@ -44,6 +45,8 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const login = (email: string, password: string) => {
@@ -91,6 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setCurrentUser(userData as any);
       } else {
         setCurrentUser(null);
+        navigate('/login');
       }
     });
     return unsubscribe;

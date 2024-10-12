@@ -24,6 +24,76 @@ interface OrganizationProfile {
   joinToken: string;
 }
 
+// Organization Info Component
+const OrganizationInfo: React.FC<{
+  defaultValues: OrganizationProfile;
+  handleFormSubmit: (data: OrganizationProfile) => Promise<void>;
+  isLoading: boolean;
+}> = ({ defaultValues, handleFormSubmit, isLoading }) => (
+  <div className="bg-white rounded-lg shadow-xl p-8">
+    <h3 className="text-2xl font-bold mb-6 text-center">Organization Info</h3>
+    <Form
+      onSubmit={(data) => handleFormSubmit(data as OrganizationProfile)}
+      defaultValues={defaultValues}
+    >
+      <TextInput source="organizationName" label="Organization Name" />
+      <TextInput
+        source="organizationEmail"
+        label="Organization Email"
+        type="email"
+      />
+      <FileInput source="organizationLogo" label="Organization Logo" />
+      <div className="mt-6">
+        <button
+          type="submit"
+          className="w-full px-6 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-500"
+          disabled={isLoading}
+        >
+          {isLoading ? "Saving..." : "Save Organization"}
+        </button>
+      </div>
+    </Form>
+  </div>
+);
+
+// Token Generation Component
+const TokenGeneration: React.FC<{
+  defaultValues: OrganizationProfile;
+  generateToken: () => Promise<void>;
+  isLoading: boolean;
+}> = ({ defaultValues, generateToken, isLoading }) => {
+  const qrCodeUrl = `${import.meta.env.VITE_WEBSITE_URL}login?organizationToken=${defaultValues.joinToken}`;
+
+  return (
+    <div className="bg-white rounded-lg shadow-xl p-8">
+      <h3 className="text-2xl font-bold mb-6 text-center">
+        Organization Token
+      </h3>
+      <p className="text-center text-gray-600">
+        Share this token with your team to join the organization
+      </p>
+      {defaultValues.joinToken && (
+        <p className="text-center text-blue-600 mt-4 break-words">
+          {defaultValues.joinToken}
+        </p>
+      )}
+      <button
+        onClick={generateToken}
+        className="w-full mt-4 px-6 py-3 text-lg font-semibold text-white bg-green-600 rounded-lg hover:bg-green-500"
+        disabled={isLoading}
+      >
+        {isLoading ? "Generating..." : "Generate Token"}
+      </button>
+
+      {defaultValues.joinToken && (
+        <div className="mt-6 flex justify-center">
+          <QRCodeCanvas value={qrCodeUrl} size={180} />
+        </div>
+      )}
+    </div>
+  );
+};
+
 const RegisterOrganization: React.FC = () => {
   const { currentUser } = useAuth();
   const { notify } = useNotify();
@@ -48,7 +118,6 @@ const RegisterOrganization: React.FC = () => {
         );
         if (organizationData) {
           setOrganizationExists(true); // Organization found, set the state
-          // Update default values with fetched organization data
           setDefaultValues({
             organizationName: organizationData.organizationName || "",
             organizationEmail:
@@ -77,7 +146,7 @@ const RegisterOrganization: React.FC = () => {
   // Transform file to FormattedFile type
   const transformFile = (file: string): FormattedFile => {
     return {
-      rawFile: new File([], file), // Creating a dummy File instance
+      rawFile: new File([], file),
       src: file,
       title: file,
     };
@@ -117,7 +186,9 @@ const RegisterOrganization: React.FC = () => {
   const generateToken = async () => {
     const token = uuidv4();
     if (currentUser) {
-      await organizationController.update(currentUser.uid, { joinToken: token });
+      await organizationController.update(currentUser.uid, {
+        joinToken: token,
+      });
       fetchOrganizationData();
       notify("Token generated and saved successfully", "success");
     }
@@ -129,17 +200,17 @@ const RegisterOrganization: React.FC = () => {
 
     try {
       let logoUrl = data.organizationLogo;
-
+      console.log(data.organizationLogo);
       if (
         data.organizationLogo &&
-        typeof data.organizationLogo === "object" &&
+        typeof data.organizationLogo[0] === "object" &&
         data.organizationLogo[0].src !== data.organizationLogo[0].title
       ) {
         const file = (data.organizationLogo as FormattedFile[])[0];
         logoUrl = await uploadLogoToStorage(file);
       } else {
         logoUrl =
-          data.organizationLogo && typeof data.organizationLogo === "object"
+          data.organizationLogo && typeof data.organizationLogo[0] === "object"
             ? data.organizationLogo[0].src
             : null;
       }
@@ -165,78 +236,31 @@ const RegisterOrganization: React.FC = () => {
       notify(`Failed to register organization: ${error.message}`, "error");
       console.error(error);
     }
-    await fetchOrganizationData(); // Refetch organization data
+    await fetchOrganizationData();
     setIsLoading(false);
   };
-
-  const qrCodeUrl = `${import.meta.env.VITE_WEBSITE_URL}login?organizationToken=${defaultValues.joinToken}`;
 
   return isLoading ? (
     <Loading />
   ) : (
     <section className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
-        {/* Dynamically change title based on whether the organization exists */}
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          {organizationExists ? "Organization" : "Register Organization"}
-        </h2>
-
-        <Form
-          onSubmit={(data) => handleFormSubmit(data as OrganizationProfile)}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-5xl">
+        {/* Left Side - Organization Info */}
+        <OrganizationInfo
           defaultValues={defaultValues}
-        >
-          {/* Organization Name */}
-          <TextInput source="organizationName" label="Organization Name" />
+          handleFormSubmit={handleFormSubmit}
+          isLoading={isLoading}
+        />
 
-          {/* Organization Email */}
-          <TextInput
-            source="organizationEmail"
-            label="Organization Email"
-            type="email"
-          />
-
-          {/* Organization Logo */}
-          <FileInput source="organizationLogo" label="Organization Logo" />
-
-          <div className="mt-6">
-            <button
-              type="submit"
-              className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-500"
-              disabled={isLoading}
-            >
-              {isLoading ? "Saving..." : "Save Organization"}
-            </button>
-          </div>
-        </Form>
-
+        {/* Right Side - Token Generation */}
         {organizationExists && (
-          <div>
-            <h3 className="text-xl font-bold mt-6 text-center">
-              Organization Token
-            </h3>
-            <p className="text-center text-gray-600">
-              Share this token with your team to join the organization
-            </p>
-            {defaultValues.joinToken && (
-              <p className="text-center text-blue-600">{defaultValues.joinToken}</p>
-            )}
-            <button
-              onClick={generateToken}
-              className="w-full px-4 py-2 mt-4 text-white bg-blue-600 rounded-md hover:bg-blue-500"
-              disabled={isLoading}
-            >
-              {isLoading ? "Generating..." : "Generate Token"}
-            </button>
-
-            {defaultValues.joinToken && (
-              <div className="mt-6 flex justify-center">
-                <QRCodeCanvas value={qrCodeUrl} size={200} />
-              </div>
-            )}
-          </div>
+          <TokenGeneration
+            defaultValues={defaultValues}
+            generateToken={generateToken}
+            isLoading={isLoading}
+          />
         )}
       </div>
-      {isLoading && <Loading />} {/* Loading Indicator */}
     </section>
   );
 };
