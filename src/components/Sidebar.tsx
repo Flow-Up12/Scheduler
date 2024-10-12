@@ -116,7 +116,7 @@ const Sidebar: React.FC = () => {
             <ul className="space-y-2">
               {events.sort((a, b) => {
                   return a.startStr < b.startStr ? -1 : 1;
-              }).map((event) => {
+              }).map((event, i) => {
                 const startDate = event.startStr ? new Date(event.startStr) : null;
                 const endDate = event.endStr ? new Date(event.endStr) : null;
                 
@@ -136,7 +136,7 @@ const Sidebar: React.FC = () => {
 
                 return (
                   <li
-                    key={event.id}
+                    key={event.id + i}
                     className="text-sm text-gray-600 border-b pb-2 border-gray-300 -ml-5"
                   >
                     <span>{event.title}</span>

@@ -65,6 +65,9 @@ export const Header: React.FC = () => {
                   horizontal: "right",
                 }}
               >
+                <MenuItem onClick={() => handleRouteClick('/schedule')}>
+                  Schedule
+                </MenuItem>
                 <MenuItem onClick={() => handleRouteClick('/profile')}>Profile</MenuItem>
                 <MenuItem onClick={() => handleRouteClick('/organization')}>
                   Organization

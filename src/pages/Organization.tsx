@@ -47,7 +47,6 @@ const OrganizationInfo: React.FC<{
         <button
           type="submit"
           className="w-full px-6 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-500"
-          disabled={isLoading}
         >
           {isLoading ? "Saving..." : "Save Organization"}
         </button>

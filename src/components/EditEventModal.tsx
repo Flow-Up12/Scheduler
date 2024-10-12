@@ -1,7 +1,10 @@
-// src/components/EditEventModal.tsx
-import { useState, useEffect } from 'react';
-import { useScheduleContext } from '../context/ScheduleContextProvider';
-import Modal from './Modal';
+import { useScheduleContext } from "../context/ScheduleContextProvider";
+import Modal from "./Modal";
+import {
+  TextInput,
+  TextAreaInput,
+  Form,
+} from "mj-react-form-builder";
 
 const EditEventModal = () => {
   const {
@@ -9,82 +12,77 @@ const EditEventModal = () => {
     setIsEditEventModalOpen,
     selectedEvent,
     handleEditEvent,
+    handleDeleteEvent,
   } = useScheduleContext();
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [image, setImage] = useState<File | null>(null); // State for image upload
-
-  useEffect(() => {
-    if (selectedEvent) {
-      setTitle(selectedEvent.title || '');
-      setDescription(selectedEvent.extendedProps?.description || ''); // Optional field
-    }
-  }, [selectedEvent]);
-
-  const handleSave = () => {
-    handleEditEvent({ title, extendedProps: { description, image } });
+  const handleSave = (data: {
+    title: string;
+    description: string;
+    image: File | null;
+  }) => {
+    const { title, description, image } = data;
+    handleEditEvent({
+      title,
+      extendedProps: {
+        description,
+        image,
+      },
+    });
     setIsEditEventModalOpen(false);
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
   };
 
   return (
     <Modal
-      deleteButton
+      onClose={() => setIsEditEventModalOpen(false)}
       isOpen={isEditEventModalOpen}
-      onClose={() => {
-        setIsEditEventModalOpen(false)
-        setTitle('')
-        setDescription('')
-        setImage(null)
-      }}
-      onSave={handleSave}
       title="Edit Event"
     >
-      <label className="block mb-2">
-        Title:
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-        />
-      </label>
-
-      <label className="block mb-2">
-        Description:
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-          rows={4}
-        ></textarea>
-      </label>
-
-      <label className="block mb-4">
-        Event Image:
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="block w-full mt-1"
-        />
-      </label>
-
-      {image && (
-        <div className="mt-4">
-          <img
-            src={URL.createObjectURL(image)}
-            alt="Event"
-            className="w-full h-auto rounded-md"
-          />
+      <Form
+        onSubmit={(data) => handleSave(data as any)}
+        defaultValues={{
+          title: selectedEvent?.title || "",
+          description: selectedEvent?.extendedProps?.description || "",
+          location: selectedEvent?.extendedProps.description || "",
+        }}
+      >
+        <div className="mb-4">
+          <TextInput source="title" label="Title" />
         </div>
-      )}
+
+        <div className="mb-4">
+          <TextAreaInput source="description" label="Description" rows={4} />
+        </div>
+
+        <div className="mb-4">
+          <TextInput source="location" label="Location" />
+        </div>
+
+        <div className="flex justify-between p-3">
+          {/* Placeholder div for spacing if delete button doesn't exist */}
+          <div className="flex-grow">
+            <button
+              className="px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700"
+              onClick={() => handleDeleteEvent()}
+            >
+              Delete
+            </button>
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="px-4 py-2 text-white bg-gray-600 rounded-md hover:bg-gray-700"
+              onClick={() => setIsEditEventModalOpen(false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </Form>
     </Modal>
   );
 };

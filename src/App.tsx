@@ -18,8 +18,8 @@ const App = () => {
     <Router>
       <NotifyProvider>
         <AuthProvider>
-          <ScheduleProvider>
-            <UserProvider>
+          <UserProvider>
+            <ScheduleProvider>
               <div className="relative">
                 {/* Header */}
                 <Header />
@@ -51,8 +51,8 @@ const App = () => {
                 <EditEventModal />
                 <CreateEventModal />
               </div>
-            </UserProvider>
-          </ScheduleProvider>
+            </ScheduleProvider>
+          </UserProvider>
         </AuthProvider>
       </NotifyProvider>
     </Router>
