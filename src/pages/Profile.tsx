@@ -18,7 +18,7 @@ const storage = getStorage(); // Firebase storage for photo uploads
 interface UserProfile {
   firstName: string;
   lastName: string;
-  photoURL: FormattedFile[] | null | string;
+  photoURL: FormattedFile[] | null | string | any;
   email: string;
 }
 
@@ -55,10 +55,7 @@ const ProfilePage: React.FC = () => {
           setDefaultValues({
             firstName: userData.firstName || "",
             lastName: userData.lastName || "",
-            photoURL:
-              ([
-                transformFile(userData.photoURL),
-              ] as unknown as FormattedFile[]) || "",
+            photoURL: userData.photoURL ([transformFile(userData.photoURL)]) || null,
             email: userData.email || currentUser.email || "",
           });
         }
