@@ -10,7 +10,7 @@ import {
   signOut,
 } from 'firebase/auth';
 import FirestoreController from './FirebaseController';
-import { auth } from '../firebase';
+import { auth } from '../firebase.js';
 
 
 interface AuthContextType {
