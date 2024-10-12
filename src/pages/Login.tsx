@@ -8,7 +8,7 @@ import { Form, TextInput, useNotify } from "mj-react-form-builder";
 import GoogleIcon from '@mui/icons-material/Google';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../helpers/AuthProvider';
-import ResetPasswordButton from '../components/resetPasswordButton';
+import ResetPasswordButton from '../components/ResetPasswordButton';
 
 export function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);

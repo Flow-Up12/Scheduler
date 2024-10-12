@@ -77,7 +77,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user: User) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user: any) => {
       if (user) {
         // Create or update the user document in Firestore
         const userData = {

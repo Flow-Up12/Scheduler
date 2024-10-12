@@ -8,6 +8,8 @@ import Header from "./components/Header";
 import AuthForm from "./pages/Login";
 import { AuthProvider } from "./helpers/AuthProvider";
 import { NotifyProvider } from "mj-react-form-builder";
+import RegisterOrganization from "./pages/RegisterOrganization";
+import ProfilePage from "./pages/Profile";
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
               {/* Main Routes */}
               <Routes>
                 <Route path="/login" element={<AuthForm />} />
+                <Route path="/register-organization" element={<RegisterOrganization />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route
                   path="/schedule"
                   element={
